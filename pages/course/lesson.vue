@@ -1,6 +1,6 @@
 <template>
   <div>
-    Lesson 
+    Lesson page 
   </div>
 </template>
 
