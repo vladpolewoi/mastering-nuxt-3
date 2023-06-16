@@ -17,7 +17,7 @@
 				<h3>Chapters</h3>
 			</div>
 
-			<div class="prose p-12 bg-white rounded-md w-[65ch]">
+			<div class="prose p-12 bg-white rounded-md w-[65ch] prose-lg">
 				<NuxtPage />
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 
 <script>
 export default {
-	name: "course",
+	name: "Course",
 	props: {},
 }
 </script>

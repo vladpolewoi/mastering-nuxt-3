@@ -1,2 +1,1 @@
 ### Mastering Nuxt 3
-
