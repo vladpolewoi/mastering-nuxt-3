@@ -41,7 +41,13 @@ const lesson = computed(() => {
 	})
 })
 
-console.log(course)
+const title = computed(() => {
+	return `${lesson.value.title} - ${course.title} - Mastering Nuxt`
+})
+
+useHead({
+	title,
+})
 </script>
 
 <style lang="scss" scoped></style>
