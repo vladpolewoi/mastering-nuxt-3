@@ -54,7 +54,7 @@ useHead({
 })
 
 // Progress tracking
-const progress = useState("progress", () => [])
+const progress = useLocalStorage("progress", [])
 
 const isLessonCompleted = computed(
 	() => progress.value?.[chapter.value.number - 1]?.[lesson.value.number - 1]

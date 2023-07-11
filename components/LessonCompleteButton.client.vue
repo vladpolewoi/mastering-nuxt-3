@@ -9,7 +9,7 @@
 		<input
 			type="checkbox"
 			:value="modelValue"
-			@input="() => $emit('update:modelValue', !modelValue)"
+			@input="() => $emit('update:model-value', !modelValue)"
 			class="hidden"
 		/>{{ modelValue ? "Completed" : "Mark as complete" }}</label
 	>
@@ -23,7 +23,7 @@ defineProps({
 	},
 })
 
-defineEmits(["update:modelValue"])
+defineEmits(["update:model-value"])
 </script>
 
 <style lang="scss" scoped>
