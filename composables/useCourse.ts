@@ -7,6 +7,7 @@ type Lesson = {
 	downloadUrl: string
 	videoId: number
 	text: string
+	path: string
 	sourceUrl?: string
 }
 

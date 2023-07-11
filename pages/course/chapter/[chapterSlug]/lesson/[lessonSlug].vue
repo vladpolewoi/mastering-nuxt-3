@@ -24,7 +24,11 @@
 		<p>{{ lesson.text }}</p>
 		<LessonCompleteButton
 			:model-value="isLessonCompleted"
-			@update:model-value="toggleComplete"
+			@update:model-value="
+				() => {
+					throw createError('Not implemented')
+				}
+			"
 		/>
 	</div>
 </template>
