@@ -33,31 +33,47 @@
 const course = useCourse()
 const route = useRoute()
 
+definePageMeta({
+	validate({ params }) {
+		const course = useCourse()
+
+		const chapter = course.chapters.find((chapter) => {
+			return chapter.slug === params.chapterSlug
+		})
+
+		if (!chapter) {
+			return createError({
+				message: "Chapter not found",
+				statusCode: 404,
+			})
+		}
+
+		const lesson = chapter.lessons.find((lesson) => {
+			return lesson.slug === params.lessonSlug
+		})
+
+		if (!lesson) {
+			return createError({
+				message: "Lesson not found",
+				statusCode: 404,
+			})
+		}
+
+		return true
+	},
+})
+
 const chapter = computed(() => {
 	return course.chapters.find((chapter) => {
 		return chapter.slug === route.params.chapterSlug
 	})
 })
 
-if (!chapter.value) {
-	throw createError({
-		message: "Chapter not found",
-		statusCode: 404,
-	})
-}
-
 const lesson = computed(() => {
 	return chapter.value.lessons.find((lesson) => {
 		return lesson.slug === route.params.lessonSlug
 	})
 })
-
-if (!lesson.value) {
-	throw createError({
-		message: "Lesson not found",
-		statusCode: 404,
-	})
-}
 
 const title = computed(() => {
 	return `${lesson.value.title} - ${course.title} - Mastering Nuxt`
