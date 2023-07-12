@@ -61,7 +61,8 @@
 <script setup>
 const { chapters } = useCourse()
 
-const resetError = (error) => {
+const resetError = async (error) => {
+	await navigateTo("/")
 	error.value = null
 }
 </script>

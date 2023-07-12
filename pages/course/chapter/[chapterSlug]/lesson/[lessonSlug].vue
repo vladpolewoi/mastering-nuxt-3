@@ -24,11 +24,7 @@
 		<p>{{ lesson.text }}</p>
 		<LessonCompleteButton
 			:model-value="isLessonCompleted"
-			@update:model-value="
-				() => {
-					throw createError('Not implemented')
-				}
-			"
+			@update:model-value="toggleComplete"
 		/>
 	</div>
 </template>
@@ -43,11 +39,25 @@ const chapter = computed(() => {
 	})
 })
 
+if (!chapter.value) {
+	throw createError({
+		message: "Chapter not found",
+		statusCode: 404,
+	})
+}
+
 const lesson = computed(() => {
 	return chapter.value.lessons.find((lesson) => {
 		return lesson.slug === route.params.lessonSlug
 	})
 })
+
+if (!lesson.value) {
+	throw createError({
+		message: "Lesson not found",
+		statusCode: 404,
+	})
+}
 
 const title = computed(() => {
 	return `${lesson.value.title} - ${course.title} - Mastering Nuxt`
