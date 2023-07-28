@@ -6,13 +6,28 @@
 		/>
 		<div class="text-right">
 			<div class="font-medium">{{ name }}</div>
-			<button class="text-sm underline text-slate-500">Log out</button>
+			<button class="text-sm underline text-slate-500" @click="logout">
+				Log out
+			</button>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 const user = useSupabaseUser()
-const name = computed(() => user?.value?.user_metadata.full_name)
-const profile = computed(() => user?.value?.user_metadata.avatar_url)
+const { auth } = useSupabaseClient()
+
+async function logout() {
+	const { error } = await auth.signOut()
+
+	if (error) {
+		console.log("Sign Out Error: ", error)
+		return
+	}
+
+	await navigateTo("/login")
+}
+
+const name = computed(() => user.value?.user_metadata.full_name)
+const profile = computed(() => user.value?.user_metadata.avatar_url)
 </script>
