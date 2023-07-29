@@ -1,4 +1,4 @@
-import courseData from "./courseData"
+import courseData from "../server/courseData"
 
 type Lesson = {
 	title: string
