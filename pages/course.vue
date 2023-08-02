@@ -3,7 +3,7 @@
 		<div class="mb-4 flex justify-between items-center w-full">
 			<h1 class="text-3xl">
 				<span class="font-medium"
-					><span class="font-bold">{{ title }}</span></span
+					><span class="font-bold">{{ course.title }}</span></span
 				>
 			</h1>
 			<UserCard />
@@ -15,7 +15,7 @@
 			>
 				<h3>Chapters</h3>
 				<div
-					v-for="chapter in chapters"
+					v-for="chapter in course.chapters"
 					:key="chapter.slug"
 					class="space-y-1 mb-4 flex flex-col"
 				>
@@ -62,10 +62,12 @@
 </template>
 
 <script setup>
-const { chapters, title } = useCourse()
+const course = await useCourse()
+const firstLesson = await useFirstLesson()
 
 const resetError = async (error) => {
-	await navigateTo("/")
+	await navigateTo(firstLesson.path)
+
 	error.value = null
 }
 </script>
