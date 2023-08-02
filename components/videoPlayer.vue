@@ -5,7 +5,7 @@
 		:src="`https://player.vimeo.com/video/${props.videoId}`"
 		title="Video player"
 		frameborder="0"
-		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; webxr;"
 		allowfullscreen
 	>
 	</iframe>
