@@ -31,7 +31,7 @@
 						}"
 					>
 						<span class="text-gray-500"> {{ index + 1 }}. </span>
-						<span>{{ lesson.title }}</span>
+						<span class="cursor-pointer">{{ lesson.title }}</span>
 					</NuxtLink>
 				</div>
 			</div>
