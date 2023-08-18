@@ -23,13 +23,21 @@
 		<VideoPlayer v-if="lesson.videoId" :videoId="lesson.videoId" />
 		<p>{{ lesson.text }}</p>
 		<LessonCompleteButton
-			:model-value="isLessonCompleted"
+			:model-value="isCompleted"
 			@update:model-value="toggleComplete"
 		/>
 	</div>
 </template>
 
 <script setup>
+import { useCourseProgress } from "@/stores/courseProgress"
+
+// store
+const store = useCourseProgress()
+const { initialize, toggleComplete } = store
+
+initialize()
+
 const course = await useCourse()
 const route = useRoute()
 const { chapterSlug, lessonSlug } = route.params
@@ -84,18 +92,9 @@ useHead({
 	title,
 })
 
-// Progress tracking
-const progress = useLocalStorage("progress", [])
-
-const isLessonCompleted = computed(
-	() => progress.value?.[chapter.value.number - 1]?.[lesson.value.number - 1]
-)
-
-const toggleComplete = () => {
-	progress.value[chapter.value.number - 1] ||= []
-	progress.value[chapter.value.number - 1][lesson.value.number - 1] =
-		!isLessonCompleted.value
-}
+const isCompleted = computed(() => {
+	return store.progress?.[chapterSlug]?.[lessonSlug] || 0
+})
 </script>
 
 <style lang="scss" scoped></style>
