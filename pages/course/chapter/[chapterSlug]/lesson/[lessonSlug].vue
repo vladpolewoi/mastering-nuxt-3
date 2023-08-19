@@ -23,6 +23,7 @@
 		<VideoPlayer v-if="lesson.videoId" :videoId="lesson.videoId" />
 		<p>{{ lesson.text }}</p>
 		<LessonCompleteButton
+			v-if="user"
 			:model-value="isCompleted"
 			@update:model-value="toggleComplete"
 		/>
@@ -38,6 +39,7 @@ const { initialize, toggleComplete } = store
 
 initialize()
 
+const user = useSupabaseUser()
 const course = await useCourse()
 const route = useRoute()
 const { chapterSlug, lessonSlug } = route.params
