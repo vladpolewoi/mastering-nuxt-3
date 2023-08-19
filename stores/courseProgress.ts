@@ -74,8 +74,39 @@ export const useCourseProgress = defineStore("courseProgress", () => {
 		}
 	}
 
+	const percentageCompleted = computed(() => {
+		const chapters = Object.values(progress.value).map((chapter) => {
+			const lessons = Object.values(chapter)
+			const completedLessons = lessons.filter(Boolean)
+
+			return Number((completedLessons.length / lessons.length) * 100).toFixed(0)
+		})
+
+		const totalLessons = Object.values(progress.value).reduce(
+			(number, chapter) => {
+				return number + Object.values(chapter).length
+			},
+			0
+		)
+		const totalCompletedLessons = Object.values(progress.value).reduce(
+			(number, chapter) => {
+				return number + Object.values(chapter).filter(Boolean).length
+			},
+			0
+		)
+		const course = Number((totalCompletedLessons / totalLessons) * 100).toFixed(
+			0
+		)
+
+		return {
+			chapters,
+			course,
+		}
+	})
+
 	return {
 		progress,
+		percentageCompleted,
 		initialize,
 		toggleComplete,
 	}
