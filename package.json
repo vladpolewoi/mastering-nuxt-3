@@ -27,5 +27,8 @@
 		"prisma": "^5.1.0",
 		"sass": "^1.63.6",
 		"vite-plugin-vsharp": "^1.4.2"
+	},
+	"dependencies": {
+		"stripe": "^13.9.0"
 	}
 }
