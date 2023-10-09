@@ -1,0 +1,69 @@
+datasource db {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64"] // if silicon mac M1 chip
+}
+
+model Course {
+  id             Int              @id @default(autoincrement())
+  title          String
+  chapters       Chapter[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  CoursePurchase CoursePurchase[]
+}
+
+model Chapter {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String
+  number    Int
+  lessons   Lesson[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Course    Course   @relation(fields: [courseId], references: [id])
+  courseId  Int
+}
+
+model Lesson {
+  id             Int              @id @default(autoincrement())
+  title          String
+  slug           String
+  number         Int
+  downloadUrl    String
+  videoId        Int
+  text           String
+  sourceUrl      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Chapter        Chapter          @relation(fields: [chapterId], references: [id])
+  chapterId      Int
+  LessonProgress LessonProgress[]
+}
+
+model LessonProgress {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  completed Boolean  @default(false)
+  Lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  lessonId  Int
+  userEmail String
+
+  @@unique([lessonId, userEmail])
+}
+
+model CoursePurchase {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Course    Course   @relation(fields: [courseId], references: [id])
+  courseId  Int
+  userEmail String
+  verified  Boolean  @default(false)
+  paymentId String   @unique
+}

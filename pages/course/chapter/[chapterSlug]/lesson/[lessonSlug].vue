@@ -23,22 +23,34 @@
 		<VideoPlayer v-if="lesson.videoId" :videoId="lesson.videoId" />
 		<p>{{ lesson.text }}</p>
 		<LessonCompleteButton
-			:model-value="isLessonCompleted"
+			v-if="user"
+			:model-value="isCompleted"
 			@update:model-value="toggleComplete"
 		/>
 	</div>
 </template>
 
 <script setup>
-const course = useCourse()
+import { useCourseProgress } from "@/stores/courseProgress"
+
+// store
+const store = useCourseProgress()
+const { initialize, toggleComplete } = store
+
+initialize()
+
+const user = useSupabaseUser()
+const course = await useCourse()
 const route = useRoute()
+const { chapterSlug, lessonSlug } = route.params
+const lesson = await useLesson(chapterSlug, lessonSlug)
 
 definePageMeta({
 	middleware: [
-		function ({ params }, from) {
-			const course = useCourse()
+		async function ({ params }, from) {
+			const course = await useCourse()
 
-			const chapter = course.chapters.find((chapter) => {
+			const chapter = course.value.chapters.find((chapter) => {
 				return chapter.slug === params.chapterSlug
 			})
 
@@ -69,37 +81,22 @@ definePageMeta({
 })
 
 const chapter = computed(() => {
-	return course.chapters.find((chapter) => {
+	return course.value.chapters.find((chapter) => {
 		return chapter.slug === route.params.chapterSlug
 	})
 })
 
-const lesson = computed(() => {
-	return chapter.value.lessons.find((lesson) => {
-		return lesson.slug === route.params.lessonSlug
-	})
-})
-
 const title = computed(() => {
-	return `${lesson.value.title} - ${course.title} - Mastering Nuxt`
+	return `${lesson.value.title} - ${course.value.title} - Mastering Nuxt`
 })
 
 useHead({
 	title,
 })
 
-// Progress tracking
-const progress = useLocalStorage("progress", [])
-
-const isLessonCompleted = computed(
-	() => progress.value?.[chapter.value.number - 1]?.[lesson.value.number - 1]
-)
-
-const toggleComplete = () => {
-	progress.value[chapter.value.number - 1] ||= []
-	progress.value[chapter.value.number - 1][lesson.value.number - 1] =
-		!isLessonCompleted.value
-}
+const isCompleted = computed(() => {
+	return store.progress?.[chapterSlug]?.[lessonSlug] || 0
+})
 </script>
 
 <style lang="scss" scoped></style>

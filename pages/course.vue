@@ -1,11 +1,12 @@
 <template>
 	<div>
-		<div class="prose mb-12">
-			<h1>
+		<div class="mb-4 flex justify-between items-center w-full">
+			<h1 class="text-3xl">
 				<span class="font-medium"
-					><span class="font-bold">{{ title }}</span></span
+					><span class="font-bold">{{ course.title }}</span></span
 				>
 			</h1>
+			<UserCard />
 		</div>
 
 		<div class="flex flex-row justify-center flex-grow">
@@ -14,11 +15,21 @@
 			>
 				<h3>Chapters</h3>
 				<div
-					v-for="chapter in chapters"
+					v-for="(chapter, index) in course.chapters"
 					:key="chapter.slug"
 					class="space-y-1 mb-4 flex flex-col"
 				>
-					<h4>{{ chapter.title }}</h4>
+					<h4 class="flex justify-between items-center">
+						{{ chapter.title }}
+
+						<span
+							v-if="percentageCompleted && user"
+							class="text-emerald-500 text-sm"
+						>
+							{{ percentageCompleted.chapters[index] }}%
+						</span>
+					</h4>
+
 					<NuxtLink
 						v-for="(lesson, index) in chapter.lessons"
 						:key="lesson.slug"
@@ -30,8 +41,15 @@
 						}"
 					>
 						<span class="text-gray-500"> {{ index + 1 }}. </span>
-						<span>{{ lesson.title }}</span>
+						<span class="cursor-pointer">{{ lesson.title }}</span>
 					</NuxtLink>
+				</div>
+
+				<div
+					v-if="percentageCompleted"
+					class="mt-8 text-sm font-medium text-gray-500 flex justify-between items-center"
+				>
+					Course completion: <span>{{ percentageCompleted.course }}%</span>
 				</div>
 			</div>
 
@@ -61,10 +79,19 @@
 </template>
 
 <script setup>
-const { chapters, title } = useCourse()
+import { useCourseProgress } from "@/stores/courseProgress"
+import { storeToRefs } from "pinia"
+
+const user = useSupabaseUser()
+const course = await useCourse()
+const firstLesson = await useFirstLesson()
+
+// Get chapter competion percentages
+const { percentageCompleted } = storeToRefs(useCourseProgress())
 
 const resetError = async (error) => {
-	await navigateTo("/")
+	await navigateTo(firstLesson.path)
+
 	error.value = null
 }
 </script>

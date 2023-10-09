@@ -1,5 +1,5 @@
-export default () => {
-	const { chapters } = useCourse()
+export default async () => {
+	const course = await useCourse()
 
-	return chapters[0].lessons[0]
+	return course.value.chapters[0].lessons[0]
 }

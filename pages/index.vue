@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-const firstLesson = useFirstLesson()
+const firstLesson = await useFirstLesson()
 </script>
 
 <style lang="scss" scoped></style>
