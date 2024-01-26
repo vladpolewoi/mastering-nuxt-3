@@ -13,3 +13,5 @@ NUXT_PUBLIC_STRIPE_KEY=(stripe)
 NUXT_SECRET_KEY=(stripe)
 NUXT_STRIPE_WEBHOOK_SECRET=(stripe cli)
 ```
+
+### [View Demo](https://vladpolewoi-mastering-nuxt-3.netlify.app/landing)

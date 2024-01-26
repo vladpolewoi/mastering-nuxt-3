@@ -69,7 +69,6 @@ const formStyle = {
 }
 const elements = computed(() => stripe.value?.elements())
 const setupStripe = () => {
-	console.log(config)
 	stripe.value = Stripe(config.public.stripeKey)
 	if (!card.value && elements.value) {
 		card.value = elements.value.create("card", {
